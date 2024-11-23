@@ -9,11 +9,25 @@ const Login = () => {
         <img className="login-logo" src={logo} alt="" />
         {/* 登录表单 */}
         <Form>
-          <Form.Item>
+          <Form.Item
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your username!',
+              },
+            ]}>
             <Input size="large" placeholder="请输入手机号" />
           </Form.Item>
-          <Form.Item>
-            <Input size="large" placeholder="请输入验证码" />
+          <Form.Item 
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+            ]}>
+            <Input size="large" placeholder="请输入验证码"  />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" size="large" block>
