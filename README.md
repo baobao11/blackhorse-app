@@ -7,3 +7,6 @@
 
 ## 路径的联想提示
 根目录新建jsconfig.json，给vscode读取
+
+# redux
+`npm i react-redux @reduxjs/toolkit`
