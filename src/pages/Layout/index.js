@@ -1,5 +1,11 @@
+import { request } from "@/utils";
+import { useEffect } from "react";
+
 const Layout = () => {
-  return <div>thisis Layout</div>
+  useEffect(() => {
+    request.get("user/profile");
+  }, []);
+  return <div>thisis Layout</div>;
 };
 
 export default Layout;
