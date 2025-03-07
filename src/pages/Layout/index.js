@@ -9,9 +9,13 @@ import {
 // 解决：终于在官方issue里面找到原因是 antd 4+版本不带有 @ant-design/icons，包括 @ant-design/compatible 等等。直接安装 npm i @ant-design/icons 解决
 import "./index.scss";
 
+import { Outlet, Link, useLocation } from "react-router-dom";
+
 const { Header, Sider } = Layout;
 
 const GeekLayout = () => {
+  const location = useLocation();
+  const selectedKey = location.pathname; // 获取当前路由,高亮菜单
   return (
     <Layout>
       <Header className="header">
@@ -30,22 +34,23 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={["1"]}
+            selectedKeys={selectedKey}
             style={{ height: "100%", borderRight: 0 }}
           >
-            <Menu.Item icon={<HomeOutlined />} key="1">
-              数据概览
+            <Menu.Item icon={<HomeOutlined />} key="/">
+              <Link to="/">数据概览</Link>
             </Menu.Item>
-            <Menu.Item icon={<DiffOutlined />} key="2">
-              内容管理
+            <Menu.Item icon={<DiffOutlined />} key="/article">
+              <Link to="/article">内容管理</Link>
             </Menu.Item>
-            <Menu.Item icon={<EditOutlined />} key="3">
-              发布文章
+            <Menu.Item icon={<EditOutlined />} key="/publish">
+              <Link to="/publish">发布文章</Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
-          内容
+          {/* 二级路由出口 */}
+          <Outlet />
         </Layout>
       </Layout>
     </Layout>
