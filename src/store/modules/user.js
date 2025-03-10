@@ -2,6 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import { request, setToken as _setToken, getToken, removeToken } from "@/utils";
+import { loginAPI, getUserInfoAPI } from "@/apis/user";
 const useStore = createSlice({
   name: "user",
   // 数据状态
@@ -38,7 +39,7 @@ const useReducer = useStore.reducer;
 const fetchLogin = (loginForm) => {
   return async (dispatch) => {
     // 1、发送异步请求
-    const res = await request.post("/authorizations", loginForm);
+    const res = await loginAPI(loginForm);
     // 2、提交同步action进行token的存入
     dispatch(setToken(res.data.token));
   };
@@ -46,7 +47,7 @@ const fetchLogin = (loginForm) => {
 
 const fetchUserInfo = () => {
   return async (dispatch) => {
-    const res = await request.get("/user/profile");
+    const res = await getUserInfoAPI();
     dispatch(setUserInfo(res.data));
   };
 };
