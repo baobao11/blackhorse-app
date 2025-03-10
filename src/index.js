@@ -8,9 +8,9 @@ import store from "./store";
 import "normalize.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>  注释掉，富文本编辑器才不会渲染两次
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+  // </React.StrictMode>
 );
