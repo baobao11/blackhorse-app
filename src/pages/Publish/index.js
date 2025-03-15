@@ -46,7 +46,12 @@ const Publish = () => {
     };
     createArticleAPI(reqData);
   };
-
+  // 上传图片
+  const [fileList, setFileList] = useState([]);
+  const onChange = (value) => {
+    console.log("uploading", value);
+    setFileList(value.fileList);
+  };
   return (
     <div className="publish">
       <Card
@@ -85,7 +90,7 @@ const Publish = () => {
               ))}
             </Select>
           </Form.Item>
-          {/* <Form.Item label="封面">
+          <Form.Item label="封面">
             <Form.Item name="type">
               <Radio.Group>
                 <Radio value={1}>单图</Radio>
@@ -98,12 +103,15 @@ const Publish = () => {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList
+              action="http://geek.itheima.net/v1_0/upload"
+              fileList={fileList}
+              onChange={onChange}
             >
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
               </div>
             </Upload>
-          </Form.Item> */}
+          </Form.Item>
           <Form.Item
             label="内容"
             name="content"
