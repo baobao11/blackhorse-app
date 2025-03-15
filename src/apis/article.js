@@ -8,3 +8,12 @@ export function getChannelListAPI() {
     method: "GET",
   });
 }
+
+// 发布文章
+export function createArticleAPI(data) {
+  return request({
+    url: "/mp/articles?draft=false",
+    method: "POST",
+    data,
+  });
+}

@@ -18,7 +18,7 @@ import "./index.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { getChannelListAPI } from "@/apis/article";
+import { createArticleAPI, getChannelListAPI } from "@/apis/article";
 
 const { Option } = Select;
 
@@ -31,6 +31,22 @@ const Publish = () => {
     };
     getChannelList();
   }, []);
+
+  // 表单提交
+  const onFinished = (formValue) => {
+    console.log(formValue);
+    const { title, content, channel_id } = formValue;
+    const reqData = {
+      title,
+      content,
+      cover: {
+        type: 0,
+      },
+      channel_id,
+    };
+    createArticleAPI(reqData);
+  };
+
   return (
     <div className="publish">
       <Card
@@ -47,6 +63,7 @@ const Publish = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1 }}
+          onFinish={onFinished}
         >
           <Form.Item
             label="标题"
@@ -68,8 +85,7 @@ const Publish = () => {
               ))}
             </Select>
           </Form.Item>
-
-          <Form.Item label="封面">
+          {/* <Form.Item label="封面">
             <Form.Item name="type">
               <Radio.Group>
                 <Radio value={1}>单图</Radio>
@@ -87,7 +103,7 @@ const Publish = () => {
                 <PlusOutlined />
               </div>
             </Upload>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="内容"
             name="content"
