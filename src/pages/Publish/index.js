@@ -19,6 +19,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import { createArticleAPI, getChannelListAPI } from "@/apis/article";
+import { message } from "antd";
 
 const { Option } = Select;
 
@@ -35,12 +36,16 @@ const Publish = () => {
   // 表单提交
   const onFinished = (formValue) => {
     console.log(formValue);
+    // 校验图片数量是否图片类型
+    if (fileList.length !== imageType)
+      return message.warning("封面图片数量不正确");
     const { title, content, channel_id } = formValue;
     const reqData = {
       title,
       content,
       cover: {
-        type: 0,
+        type: imageType,
+        images: fileList.map((item) => item.response.data.url),
       },
       channel_id,
     };
@@ -58,6 +63,7 @@ const Publish = () => {
   const onTypeChange = (e) => {
     console.log(e.target.value);
     setImageType(e.target.value);
+    if (e.target.value === 0) setFileList([]);
   };
   return (
     <div className="publish">
