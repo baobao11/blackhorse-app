@@ -18,20 +18,15 @@ import "./index.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { createArticleAPI, getChannelListAPI } from "@/apis/article";
+import { createArticleAPI } from "@/apis/article";
 import { message } from "antd";
+import { useChannel } from "@/hooks/useChannel";
 
 const { Option } = Select;
 
 const Publish = () => {
-  const [channelList, setChannelList] = useState([]);
-  useEffect(() => {
-    const getChannelList = async () => {
-      const res = await getChannelListAPI();
-      setChannelList(res.data.channels);
-    };
-    getChannelList();
-  }, []);
+  // 获取频道列表
+  const { channelList } = useChannel();
 
   // 表单提交
   const onFinished = (formValue) => {
