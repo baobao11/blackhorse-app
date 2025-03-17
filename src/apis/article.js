@@ -17,3 +17,12 @@ export function createArticleAPI(data) {
     data,
   });
 }
+
+// 文章列表
+export function getArticleListAPI(params) {
+  return request({
+    url: "/mp/articles",
+    method: "GET",
+    params,
+  });
+}

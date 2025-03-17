@@ -12,6 +12,7 @@ import {
   Space,
 } from "antd";
 import "moment/locale/zh-cn";
+import { useState, useEffect } from "react";
 
 // 汉化包 时间选择器显示中文
 import locale from "antd/es/date-picker/locale/zh_CN";
@@ -20,6 +21,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import img404 from "@/assets/error.png";
 import { useChannel } from "@/hooks/useChannel";
+import { getArticleListAPI } from "@/apis/article";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -27,6 +29,19 @@ const { RangePicker } = DatePicker;
 const Article = () => {
   // 获取频道列表
   const { channelList } = useChannel();
+
+  // 获取文章列表
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    async function getList() {
+      const res = await getArticleListAPI();
+      setList(res.data.results);
+      setTotal(res.data.total_count);
+    }
+    getList();
+  }, []);
+
   const columns = [
     {
       title: "封面",
@@ -79,21 +94,6 @@ const Article = () => {
       },
     },
   ];
-
-  const data = [
-    {
-      id: "8218",
-      comment_count: 0,
-      cover: {
-        images: ["http://geek.itheima.net/resources/images/15.jpg"],
-      },
-      like_count: 0,
-      pubdate: "2019-03-11 09:00:00",
-      read_count: 2,
-      status: 2,
-      title: "wkwebview离线化加载h5资源解决方案",
-    },
-  ];
   return (
     <div>
       <Card
@@ -138,8 +138,8 @@ const Article = () => {
           </Form.Item>
         </Form>
       </Card>
-      <Card title={`根据筛选条件共查询到 count 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={data} />
+      <Card title={`根据筛选条件共查询到 ${total} 条结果：`}>
+        <Table rowKey="id" columns={columns} dataSource={list} />
       </Card>
     </div>
   );
