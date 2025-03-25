@@ -28,19 +28,41 @@ const { RangePicker } = DatePicker;
 
 const Article = () => {
   // 获取频道列表
-  const { channelList } = useChannel();
+  const { channelList } = useChannel([]);
+
+  // 筛选功能
+  const [reqData, setReqData] = useState({
+    status: "",
+    channel_id: "",
+    begin_pubdate: "",
+    end_pubdate: "",
+    page: 1,
+    per_page: 10
+})
+  
+  // 获取筛选数据
+  const onFinish = (formValue) => {
+    console.log("formValue",formValue )
+    setReqData({
+      ...reqData,
+      channel_id: formValue.channel_id,
+      status: formValue?.status,
+      begin_pubdate: formValue.date ? formValue?.date[0].format("YYYY-MM-DD") : "",
+      end_pubdate: formValue.date ?formValue?.date[1].format("YYYY-MM-DD") : "",
+    })
+  }
 
   // 获取文章列表
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   useEffect(() => {
     async function getList() {
-      const res = await getArticleListAPI();
+      const res = await getArticleListAPI(reqData);
       setList(res.data.results);
       setTotal(res.data.total_count);
     }
     getList();
-  }, []);
+  }, [reqData]);
   // 定义状态枚举
   const status = {
     1: <Tag color="warning">待审核</Tag>,
@@ -102,16 +124,20 @@ const Article = () => {
     <div>
       <Card
         title={
-          <Breadcrumb separator=">">
-            <Breadcrumb.Item>
-              <Link to="/home">首页</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>内容管理</Breadcrumb.Item>
+          <Breadcrumb separator=">" items={[
+            {
+              title: '首页',
+              href: '/',
+            },
+            {
+              title: '内容管理',
+            },
+          ]}>
           </Breadcrumb>
         }
         style={{ marginBottom: 20 }}
       >
-        <Form initialValues={{ status: null }}>
+        <Form initialValues={{ status: null }} onFinish={onFinish}>
           <Form.Item label="状态" name="status">
             <Radio.Group>
               <Radio value={null}>全部</Radio>
@@ -125,7 +151,7 @@ const Article = () => {
           <Form.Item label="频道" name="channel_id">
             <Select placeholder="请选择文章频道" style={{ width: 120 }}>
               {channelList.map((item) => (
-                <Option value={item.id}>{item.name}</Option>
+                <Option value={item.id} key={item.id}>{item.name}</Option>
               ))}
             </Select>
           </Form.Item>
