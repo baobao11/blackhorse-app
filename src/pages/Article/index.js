@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   Card,
   Breadcrumb,
@@ -10,6 +9,7 @@ import {
   Table,
   Tag,
   Space,
+  Popconfirm
 } from "antd";
 import "moment/locale/zh-cn";
 import { useState, useEffect } from "react";
@@ -21,7 +21,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import img404 from "@/assets/error.png";
 import { useChannel } from "@/hooks/useChannel";
-import { getArticleListAPI } from "@/apis/article";
+import { getArticleListAPI, deleteArticleAPI } from "@/apis/article";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -70,6 +70,15 @@ const Article = () => {
     }
     getList();
   }, [reqData]);
+
+
+  // 删除文章
+  const onDelConfirm = async ({id}) => {
+    console.log(id);
+    await deleteArticleAPI(id)
+    setReqData({...reqData})
+  }
+
   // 定义状态枚举
   const status = {
     1: <Tag color="warning">待审核</Tag>,
@@ -116,12 +125,21 @@ const Article = () => {
         return (
           <Space size="middle">
             <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Popconfirm
+            title="删除文章"
+            description="确定要删除当前文章吗？"
+            onConfirm={() => onDelConfirm(data)}
+            okText="Yes"
+            cancelText="No"
+          >
             <Button
               type="primary"
               danger
               shape="circle"
               icon={<DeleteOutlined />}
             />
+          </Popconfirm>
+            
           </Space>
         );
       },
