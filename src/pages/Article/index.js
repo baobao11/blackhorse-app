@@ -22,11 +22,13 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import img404 from "@/assets/error.png";
 import { useChannel } from "@/hooks/useChannel";
 import { getArticleListAPI, deleteArticleAPI } from "@/apis/article";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const Article = () => {
+  const navigate = useNavigate()
   // 获取频道列表
   const { channelList } = useChannel([]);
 
@@ -124,7 +126,7 @@ const Article = () => {
       render: (data) => {
         return (
           <Space size="middle">
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={() => navigate(`/publish?id=${data.id}`)}/>
             <Popconfirm
             title="删除文章"
             description="确定要删除当前文章吗？"
