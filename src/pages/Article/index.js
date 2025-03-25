@@ -37,7 +37,7 @@ const Article = () => {
     begin_pubdate: "",
     end_pubdate: "",
     page: 1,
-    per_page: 10
+    per_page: 4
 })
   
   // 获取筛选数据
@@ -49,6 +49,13 @@ const Article = () => {
       status: formValue?.status,
       begin_pubdate: formValue.date ? formValue?.date[0].format("YYYY-MM-DD") : "",
       end_pubdate: formValue.date ?formValue?.date[1].format("YYYY-MM-DD") : "",
+    })
+  }
+  const onPageChange = (page) => {
+    console.log(page);
+    setReqData({
+      ...reqData,
+      page
     })
   }
 
@@ -169,7 +176,11 @@ const Article = () => {
         </Form>
       </Card>
       <Card title={`根据筛选条件共查询到 ${total} 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={list} />
+        <Table rowKey="id" columns={columns} dataSource={list} pagination={{
+          total,
+          pageSize: reqData.per_page,
+          onChange: onPageChange
+        }}/>
       </Card>
     </div>
   );
