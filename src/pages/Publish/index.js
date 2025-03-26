@@ -70,9 +70,15 @@ const Publish = () => {
     async function getArticleDetail() {
       const res = await getArticleById(articleId)
       console.log(res);
-      form.setFieldsValue(res.data)
+      const { cover } = res.data
+      form.setFieldsValue({
+        ...res.data,
+        type: cover.type
+      })
+      setImageType(cover.type)
+      setFileList(cover.images.map(url => ({url})))
     }
-    getArticleDetail()
+    articleId && getArticleDetail()
   }, [articleId, form])
   
   return (
