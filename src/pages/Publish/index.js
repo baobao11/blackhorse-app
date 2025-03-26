@@ -10,7 +10,7 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./index.scss";
 
@@ -18,18 +18,19 @@ import "./index.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { createArticleAPI, getArticleById } from "@/apis/article";
+import { createArticleAPI, getArticleById, updateArticleAPI } from "@/apis/article";
 import { message } from "antd";
 import { useChannel } from "@/hooks/useChannel";
 
 const { Option } = Select;
 
 const Publish = () => {
+  const navigate = useNavigate()
   // 获取频道列表
   const { channelList } = useChannel();
 
   // 表单提交
-  const onFinished = (formValue) => {
+  const onFinished = async (formValue) => {
     console.log(formValue);
     // 校验图片数量是否图片类型
     if (fileList.length !== imageType)
@@ -40,11 +41,25 @@ const Publish = () => {
       content,
       cover: {
         type: imageType,
-        images: fileList.map((item) => item.response.data.url),
+        // 兼容编辑和新增的url获取
+        images: fileList.map((item) => {
+          if (item.response) {
+            return item.response.data.url
+          } else {
+            return item.url
+          }
+        }),
       },
       channel_id,
     };
-    createArticleAPI(reqData);
+    // 根据新增和编辑状态，调用不同接口
+    if(articleId) {
+      await updateArticleAPI({...reqData, id: articleId})
+    } else {
+      await createArticleAPI(reqData);
+    }
+    message.success("文章操作成功！")
+    navigate("/article")
   };
   // 上传图片
   const [fileList, setFileList] = useState([]);

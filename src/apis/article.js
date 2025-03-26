@@ -17,6 +17,14 @@ export function createArticleAPI(data) {
     data,
   });
 }
+// 更新文章
+export function updateArticleAPI(data) {
+  return request({
+    url: `/mp/articles/${data.id}?draft=false`,
+    method: "PUT",
+    data,
+  });
+}
 
 // 文章列表
 export function getArticleListAPI(params) {
