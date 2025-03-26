@@ -78,18 +78,17 @@ const Publish = () => {
       setImageType(cover.type)
       setFileList(cover.images.map(url => ({url})))
     }
-    articleId && getArticleDetail()
+    articleId && getArticleDetail() //有id才调用回填函数
   }, [articleId, form])
   
   return (
     <div className="publish">
       <Card
         title={
-          <Breadcrumb separator=">">
-            <Breadcrumb.Item>
-              <Link to="/home">首页</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>发布文章</Breadcrumb.Item>
+          <Breadcrumb separator=">" items={[
+            { title: <Link to={"/"}>首页</Link> },
+            { title: `${articleId ? '编辑' : '创建'}文章`}
+          ]}>
           </Breadcrumb>
         }
       >
