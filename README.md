@@ -10,3 +10,7 @@
 
 # redux
 `npm i react-redux @reduxjs/toolkit`
+
+# 项目打包
+npm run build
+本地预览： npm install -g serve   serve -s build
